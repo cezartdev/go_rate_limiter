@@ -17,7 +17,7 @@ help:
 	@echo "  clean        - Remove build output"
 
 dev:
-	air
+	APP_ENV=development air
 
 build:
 	@echo "Building binary -> $(BINARY)"
