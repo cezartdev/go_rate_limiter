@@ -1,3 +1,7 @@
 tmp
+temp
+bin
+build
+out
 .env.development
 .env.production
