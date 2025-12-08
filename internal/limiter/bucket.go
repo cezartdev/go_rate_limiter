@@ -6,30 +6,30 @@ import (
 )
 
 type Bucket struct {
-	Tokens     float64
-	Capacity   float64
-	Rate       float64
-	LastRefill time.Time
-	Mu         sync.Mutex
+	tokens     float64
+	capacity   float64
+	rate       float64
+	lastRefill time.Time
+	mu         sync.Mutex
 }
 
 func (b *Bucket) Allow() bool {
 
-	b.Mu.Lock()
-	defer b.Mu.Unlock()
+	b.mu.Lock()
+	defer b.mu.Unlock()
 
 	now := time.Now()
 
-	elapsed := now.Sub(b.LastRefill).Seconds()
+	elapsed := now.Sub(b.lastRefill).Seconds()
 
-	tokensToAdd := elapsed * b.Rate
+	tokensToAdd := elapsed * b.rate
 
-	b.Tokens = min(b.Capacity, b.Tokens+tokensToAdd)
+	b.tokens = min(b.capacity, b.tokens+tokensToAdd)
 
-	b.LastRefill = now
+	b.lastRefill = now
 
-	if b.Tokens >= 1.0 {
-		b.Tokens -= 1.0
+	if b.tokens >= 1.0 {
+		b.tokens -= 1.0
 		return true
 	}
 	return false
