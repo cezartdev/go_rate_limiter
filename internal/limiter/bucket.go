@@ -1,6 +1,7 @@
 package limiter
 
 import (
+	"math"
 	"sync"
 	"time"
 )
@@ -34,6 +35,19 @@ func (b *Bucket) Allow() bool {
 	}
 	return false
 
+}
+
+func (b *Bucket) RetryAfter() int {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+
+	if b.tokens >= 1.0 {
+		return 0 
+	}
+
+	tokensNeeded := 1.0 - b.tokens
+	seconds := tokensNeeded / b.rate
+	return int(math.Ceil(seconds))
 }
 
 func min(a, b float64) float64 {
