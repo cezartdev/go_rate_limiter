@@ -46,22 +46,22 @@ func (s *Store) GetOrCreate(key string, rate, capacity float64) *Bucket {
 }
 
 func (s *Store) Cleanup(ttl time.Duration) {
-    s.mu.Lock()
-    defer s.mu.Unlock()
-    
-    now := time.Now()
-    for key, bucket := range s.buckets {
-        bucket.mu.Lock()
-        if now.Sub(bucket.lastRefill) > ttl {
-            delete(s.buckets, key)
-        }
-        bucket.mu.Unlock()
-    }
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	now := time.Now()
+	for key, bucket := range s.buckets {
+		bucket.mu.Lock()
+		if now.Sub(bucket.lastRefill) > ttl {
+			delete(s.buckets, key)
+		}
+		bucket.mu.Unlock()
+	}
 }
 
 func (s *Store) StartCleanup(ttl, interval time.Duration) {
-    ticker := time.NewTicker(interval)
-    for range ticker.C {
-        s.Cleanup(ttl)
-    }
+	ticker := time.NewTicker(interval)
+	for range ticker.C {
+		s.Cleanup(ttl)
+	}
 }

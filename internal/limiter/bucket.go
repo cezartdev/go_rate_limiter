@@ -42,7 +42,7 @@ func (b *Bucket) RetryAfter() int {
 	defer b.mu.Unlock()
 
 	if b.tokens >= 1.0 {
-		return 0 
+		return 0
 	}
 
 	tokensNeeded := 1.0 - b.tokens

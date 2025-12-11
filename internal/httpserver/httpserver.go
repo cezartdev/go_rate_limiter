@@ -10,7 +10,6 @@ import (
 	"time"
 )
 
-
 func New(addr string, handler http.Handler) *http.Server {
 	return &http.Server{
 		Addr:              addr,
@@ -21,7 +20,6 @@ func New(addr string, handler http.Handler) *http.Server {
 		IdleTimeout:       120 * time.Second,
 	}
 }
-
 
 func Run(srv *http.Server) error {
 
@@ -37,14 +35,12 @@ func Run(srv *http.Server) error {
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
 
-
 	select {
 	case err := <-errChan:
 		return err
 	case sig := <-stop:
 		log.Printf("received signal %v, shutting down...", sig)
 	}
-
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()

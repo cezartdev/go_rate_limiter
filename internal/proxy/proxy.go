@@ -11,7 +11,6 @@ import (
 	"time"
 )
 
-
 func NewReverseProxy(target string) (*httputil.ReverseProxy, error) {
 	targetURL, err := url.Parse(target)
 	if err != nil {
@@ -25,12 +24,9 @@ func NewReverseProxy(target string) (*httputil.ReverseProxy, error) {
 	proxy.Director = func(req *http.Request) {
 		originalDirector(req)
 
-
 		req.Host = targetURL.Host
 
-
 		clientIP := getClientIP(req)
-
 
 		if prior := req.Header.Get("X-Forwarded-For"); prior != "" {
 			req.Header.Set("X-Forwarded-For", prior+", "+clientIP)
@@ -38,11 +34,9 @@ func NewReverseProxy(target string) (*httputil.ReverseProxy, error) {
 			req.Header.Set("X-Forwarded-For", clientIP)
 		}
 
-	
 		if req.Header.Get("X-Real-IP") == "" {
 			req.Header.Set("X-Real-IP", clientIP)
 		}
-
 
 		if req.TLS != nil {
 			req.Header.Set("X-Forwarded-Proto", "https")
@@ -50,7 +44,6 @@ func NewReverseProxy(target string) (*httputil.ReverseProxy, error) {
 			req.Header.Set("X-Forwarded-Proto", "http")
 		}
 	}
-
 
 	proxy.ErrorHandler = func(w http.ResponseWriter, r *http.Request, err error) {
 		w.Header().Set("Content-Type", "application/json")
@@ -60,7 +53,6 @@ func NewReverseProxy(target string) (*httputil.ReverseProxy, error) {
 			"message": "failed to reach upstream service",
 		})
 	}
-
 
 	proxy.Transport = &http.Transport{
 		DialContext: (&net.Dialer{
@@ -75,7 +67,6 @@ func NewReverseProxy(target string) (*httputil.ReverseProxy, error) {
 
 	return proxy, nil
 }
-
 
 func getClientIP(r *http.Request) string {
 	// Try X-Forwarded-For first (may be set by upstream proxy)
@@ -97,7 +88,6 @@ func getClientIP(r *http.Request) string {
 	}
 	return r.RemoteAddr
 }
-
 
 func HealthHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

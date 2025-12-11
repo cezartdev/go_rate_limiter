@@ -6,7 +6,6 @@ import (
 	"strings"
 )
 
-
 func ExtractKey(r *http.Request) string {
 	// Prefer explicit API key
 	if k := strings.TrimSpace(r.Header.Get("X-API-Key")); k != "" {

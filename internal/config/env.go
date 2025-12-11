@@ -9,7 +9,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-
 type Config struct {
 	Env             string
 	BindAddr        string
@@ -20,7 +19,6 @@ type Config struct {
 	CleanupInterval time.Duration
 }
 
-
 func Load() (*Config, error) {
 	// Determine environment
 	env := os.Getenv("APP_ENV")
@@ -28,7 +26,6 @@ func Load() (*Config, error) {
 		env = "development"
 	}
 
-	
 	_ = godotenv.Load()
 
 	// Load environment-specific file (optional, overrides base)
