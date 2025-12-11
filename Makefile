@@ -1,5 +1,5 @@
 BINARY := ./build
-CMD := ./cmd/api/main.go
+CMD := ./cmd/proxy/main.go
 IMAGE := go-rate-limiter:latest
 
 help:

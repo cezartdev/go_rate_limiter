@@ -1,0 +1,24 @@
+# Ignore build artifacts
+bin/
+tmp/
+
+# Ignore git
+.git
+.gitignore
+
+# Ignore IDE/editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore env files (secrets)
+.env
+.env.*
+
+# Ignore test files
+*_test.go
+
+# Ignore docs
+*.md
+LICENSE

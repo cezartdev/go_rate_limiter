@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  # ==========================================================================
+  # Rate Limiter Proxy
+  # ==========================================================================
+  proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile.proxy
+    ports:
+      - "8080:8080"
+    environment:
+      - UPSTREAM_URL=http://upstream:9000
+      - BIND_ADDR=:8080
+      - RATE_LIMIT_RPS=5
+      - BURST=10
+      - BUCKET_TTL=300
+      - CLEANUP_INTERVAL=60
+    depends_on:
+      - upstream
+    restart: unless-stopped
+
+  # ==========================================================================
+  # Dummy Upstream (for testing)
+  # ==========================================================================
+  upstream:
+    build:
+      context: .
+      dockerfile: Dockerfile.upstream
+    ports:
+      - "9000:9000"
+    environment:
+      - UPSTREAM_BIND=:9000
+    restart: unless-stopped
